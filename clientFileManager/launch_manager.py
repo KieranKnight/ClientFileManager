@@ -17,6 +17,11 @@ import os
 import sys
 
 # Application - ui_items
+from configuration.configure import ConfigureFiles
+from third_party.Qt import QtWidgets, QtCore, QtGui
+from integrate.integrate_files import IntegrateFiles
+from ui_items.customTreeWidget import CustomTreeWidget
+from paths import _USER_DOCUMENTS
 from ui_items.addWidgets import (
     GroupWidgets, 
     AddClientItemsButtons, 
@@ -24,20 +29,13 @@ from ui_items.addWidgets import (
     AddConfigurationWidgets,
     AddSaveConfigurationWidget
 )
-from ui_items.customTreeWidget import CustomTreeWidget
-
-# Application - configuration
-from configuration.configure import ConfigureFiles
-
-# Application - integrate
-from integrate.integrate_files import IntegrateFiles
-
-# Application - third_party
-from third_party.Qt import QtWidgets, QtCore, QtGui
-
-# Application - utils
-from utils import open_file, open_folder, write_json, read_css, _USER_DOCUMENTS, _DEFAULT_CONFIG
-
+from utils import (
+    open_file, 
+    open_folder, 
+    write_json, 
+    read_css, 
+    _DEFAULT_CONFIG
+)
 
 class ClientFileManager(QtWidgets.QMainWindow):
     _OBJ_NAME = 'Client File Manager'
@@ -100,7 +98,6 @@ class ClientFileManager(QtWidgets.QMainWindow):
         root = self.tree_widget.invisibleRootItem()
         child_count = root.childCount()
         if not child_count:
-            print('No Client Files have been added.')
             return
         self.configuration_widgets.add_configuration.update_all_items(root)
         

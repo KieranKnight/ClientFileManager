@@ -1,67 +1,3 @@
-  
-/* ---------------------------------------------------------------------------
-
-    Created by the qtsass compiler v0.1.1
-
-    The definitions are in the "qdarkstyle.qss._styles.scss" module
-
-    WARNING! All changes made in this file will be lost!
-
---------------------------------------------------------------------------- */
-/* QDarkStyleSheet -----------------------------------------------------------
-
-This is the main style sheet, the palette has nine colors.
-
-It is based on three selecting colors, three greyish (background) colors
-plus three whitish (foreground) colors. Each set of widgets of the same
-type have a header like this:
-
-    ------------------
-    GroupName --------
-    ------------------
-
-And each widget is separated with a header like this:
-
-    QWidgetName ------
-
-This makes more easy to find and change some css field. The basic
-configuration is described bellow.
-
-    BACKGROUND -----------
-
-        Light   (unpressed)
-        Normal  (border, disabled, pressed, checked, toolbars, menus)
-        Dark    (background)
-
-    FOREGROUND -----------
-
-        Light   (texts/labels)
-        Normal  (not used yet)
-        Dark    (disabled texts)
-
-    SELECTION ------------
-
-        Light  (selection/hover/active)
-        Normal (selected)
-        Dark   (selected disabled)
-
-If a stranger configuration is required because of a bugfix or anything
-else, keep the comment on the line above so nobody changes it, including the
-issue number.
-
-*/
-/*
-
-See Qt documentation:
-
-  - https://doc.qt.io/qt-5/stylesheet.html
-  - https://doc.qt.io/qt-5/stylesheet-reference.html
-  - https://doc.qt.io/qt-5/stylesheet-examples.html
-
---------------------------------------------------------------------------- */
-/* QWidget ----------------------------------------------------------------
-
---------------------------------------------------------------------------- */
 QWidget {
   background-color: #19232D;
   border: 0px solid #32414B;
@@ -87,12 +23,6 @@ QWidget::item:hover {
   color: #32414B;
 }
 
-
-/* QGroupBox --------------------------------------------------------------
-
-https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qgroupbox
-
---------------------------------------------------------------------------- */
 QGroupBox {
   font-weight: bold;
   border: 1px solid #32414B;
@@ -117,44 +47,12 @@ QGroupBox::indicator {
   width: 16px;
 }
 
-
-/* QScrollBar -------------------------------------------------------------
-
-https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qscrollbar
-
---------------------------------------------------------------------------- */
-QScrollBar:horizontal {
-  height: 16px;
-  margin: 2px 16px 2px 16px;
-  border: 1px solid #32414B;
-  border-radius: 4px;
-  background-color: #19232D;
-}
-
 QScrollBar:vertical {
   background-color: #19232D;
   width: 16px;
   margin: 16px 2px 16px 2px;
   border: 1px solid #32414B;
   border-radius: 4px;
-}
-
-QScrollBar::handle:horizontal {
-  background-color: #787878;
-  border: 1px solid #32414B;
-  border-radius: 4px;
-  min-width: 8px;
-}
-
-QScrollBar::handle:horizontal:hover {
-  background-color: #148CD2;
-  border: 1px solid #148CD2;
-  border-radius: 4px;
-  min-width: 8px;
-}
-
-QScrollBar::handle:horizontal:focus {
-  border: 1px solid #1464A0;
 }
 
 QScrollBar::handle:vertical {
@@ -175,21 +73,6 @@ QScrollBar::handle:vertical:focus {
   border: 1px solid #1464A0;
 }
 
-QScrollBar::add-line:horizontal {
-  margin: 0px 0px 0px 0px;
-  height: 12px;
-  width: 12px;
-  subcontrol-position: right;
-  subcontrol-origin: margin;
-}
-
-QScrollBar::add-line:horizontal:hover, QScrollBar::add-line:horizontal:on {
-  height: 12px;
-  width: 12px;
-  subcontrol-position: right;
-  subcontrol-origin: margin;
-}
-
 QScrollBar::add-line:vertical {
   margin: 3px 0px 3px 0px;
   height: 12px;
@@ -202,21 +85,6 @@ QScrollBar::add-line:vertical:hover, QScrollBar::add-line:vertical:on {
   height: 12px;
   width: 12px;
   subcontrol-position: bottom;
-  subcontrol-origin: margin;
-}
-
-QScrollBar::sub-line:horizontal {
-  margin: 0px 3px 0px 3px;
-  height: 12px;
-  width: 12px;
-  subcontrol-position: left;
-  subcontrol-origin: margin;
-}
-
-QScrollBar::sub-line:horizontal:hover, QScrollBar::sub-line:horizontal:on {
-  height: 12px;
-  width: 12px;
-  subcontrol-position: left;
   subcontrol-origin: margin;
 }
 
@@ -235,56 +103,6 @@ QScrollBar::sub-line:vertical:hover, QScrollBar::sub-line:vertical:on {
   subcontrol-origin: margin;
 }
 
-QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal {
-  background: none;
-}
-
-QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
-  background: none;
-}
-
-QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
-  background: none;
-}
-
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-  background: none;
-}
-
-/* QTextEdit --------------------------------------------------------------
-
-https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-specific-widgets
-
---------------------------------------------------------------------------- */
-QTextEdit {
-  background-color: #19232D;
-  color: #F0F0F0;
-  border-radius: 4px;
-  border: 1px solid #32414B;
-}
-
-QTextEdit:hover {
-  border: 1px solid #148CD2;
-  color: #F0F0F0;
-}
-
-QTextEdit:focus {
-  border: 1px solid #1464A0;
-}
-
-QTextEdit:selected {
-  background: #1464A0;
-  color: #32414B;
-}
-
-/* ------------------------------------------------------------------------ */
-/* DISPLAYS --------------------------------------------------------------- */
-/* ------------------------------------------------------------------------ */
-/* QLabel -----------------------------------------------------------------
-
-https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qframe
-
---------------------------------------------------------------------------- */
 QLabel {
   background-color: #19232D;
   border: 0px solid #32414B;
@@ -299,48 +117,6 @@ QLabel:disabled {
   color: #787878;
 }
 
-
-/* QProgressBar -----------------------------------------------------------
-
-https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qprogressbar
-
---------------------------------------------------------------------------- */
-QProgressBar {
-  background-color: #19232D;
-  border: 1px solid #32414B;
-  color: #F0F0F0;
-  border-radius: 4px;
-  text-align: center;
-}
-
-QProgressBar:disabled {
-  background-color: #19232D;
-  border: 1px solid #32414B;
-  color: #787878;
-  border-radius: 4px;
-  text-align: center;
-}
-
-QProgressBar::chunk {
-  background-color: #1464A0;
-  color: #19232D;
-  border-radius: 4px;
-}
-
-QProgressBar::chunk:disabled {
-  background-color: #14506E;
-  color: #787878;
-  border-radius: 4px;
-}
-
-/* ------------------------------------------------------------------------ */
-/* BUTTONS ---------------------------------------------------------------- */
-/* ------------------------------------------------------------------------ */
-/* QPushButton ------------------------------------------------------------
-
-https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qpushbutton
-
---------------------------------------------------------------------------- */
 QPushButton {
   background-color: #505F69;
   border: 1px solid #32414B;
@@ -348,7 +124,6 @@ QPushButton {
   border-radius: 4px;
   padding: 3px;
   outline: none;
-  /* Issue #194 - Special case of QPushButton inside dialogs, for better UI */
   min-width: 80px;
 }
 
@@ -388,14 +163,6 @@ QPushButton:focus {
   border: 1px solid #1464A0;
 }
 
-/* ------------------------------------------------------------------------ */
-/* INPUTS - NO FIELDS ----------------------------------------------------- */
-/* ------------------------------------------------------------------------ */
-/* QComboBox --------------------------------------------------------------
-
-https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qcombobox
-
---------------------------------------------------------------------------- */
 QComboBox {
   border: 1px solid #0d2535;
   border-radius: 4px;
@@ -424,17 +191,7 @@ QComboBox::indicator {
   selection-background-color: transparent;
   color: transparent;
   selection-color: transparent;
-  /* Needed to remove indicator - fix #132 */
 }
-
-
-/* QTreeView QListView QTableView -----------------------------------------
-
-https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qtreeview
-https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qlistview
-https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qtableview
-
---------------------------------------------------------------------------- */
 
 QTreeView{
   background-color: #19232D;
@@ -443,11 +200,6 @@ QTreeView{
   border-radius: 4px;
 }
 
-/* QHeaderView ------------------------------------------------------------
-
-https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qheaderview
-
---------------------------------------------------------------------------- */
 QHeaderView {
   background-color: #32414B;
   border: 0px transparent #32414B;

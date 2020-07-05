@@ -19,25 +19,9 @@ import getpass
 from pathlib import Path
 
 # Application
+from paths import _CSS, _INTEGRATE_LOCATION, _LOGGING_LOCATION, _UI_CONFIGURATION
 from third_party.Qt import _loadUi
 from third_party.Qt import QtWidgets
-
-
-_ROOT = Path(os.path.realpath(__file__)).parent
-_USER_DOCUMENTS = str(Path(os.path.expanduser("~") , 'Documents'))
-_APP_LOCATION = str(Path(_USER_DOCUMENTS, 'ClientFileManager'))
-_UI_CONFIG_FOLDER = str(Path(_APP_LOCATION, 'ui_configuration'))
-_UI_CONFIGURATION = str(Path(_UI_CONFIG_FOLDER, 'configuration.json'))
-_LOGGING_LOCATION = str(Path(_APP_LOCATION, 'logging'))
-_INTEGRATE_LOCATION = str(Path(_APP_LOCATION, 'integrate'))
-_UI_LOCATION = str(Path(_ROOT, 'ui_items'))
-_CSS = str(Path(_UI_LOCATION, 'ui_style_sheet.css'))
-_ICONS = str(Path(_UI_LOCATION, 'icons'))
-_BRANCH_CLOSED_PNG = str(Path(_ICONS, 'branch_closed.png')) if not sys.platform == 'win32' else str(Path(_ICONS, 'branch_closed.png')).replace('\\', '/')
-_BRANCH_END_PNG = str(Path(_ICONS, 'branch_end.png')) if not sys.platform == 'win32' else str(Path(_ICONS, 'branch_end.png')).replace('\\', '/')
-_BRANCH_MORE_PNG = str(Path(_ICONS, 'branch_more.png')) if not sys.platform == 'win32' else str(Path(_ICONS, 'branch_more.png')).replace('\\', '/')
-_BRANCH_OPEN_PNG = str(Path(_ICONS, 'branch_open.png')) if not sys.platform == 'win32' else str(Path(_ICONS, 'branch_open.png')).replace('\\', '/')
-_BRANCH_VINE_PNG = str(Path(_ICONS, 'branch_vine.png')) if not sys.platform == 'win32' else str(Path(_ICONS, 'branch_vine.png')).replace('\\', '/')
 
 _INGEST_FOLDERS = [
         'Elements', 

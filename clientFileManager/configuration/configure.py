@@ -24,8 +24,10 @@ from pathlib import Path
 from utils import (
     read_json, 
     write_json,
+    _DEFAULT_CONFIG
+)
+from paths import (
     _APP_LOCATION,
-    _DEFAULT_CONFIG,
     _UI_CONFIG_FOLDER, 
     _UI_CONFIGURATION,
     _LOGGING_LOCATION
@@ -152,7 +154,7 @@ class IntegrateConfigure(object):
                 updates added to.
         """
         {
-            _item.sequence.addItem(str(os.path.basename(key)))
+            item.sequence.addItem(str(os.path.basename(key)))
             for (key, value) in self.output_subfolders.items()
         }
 

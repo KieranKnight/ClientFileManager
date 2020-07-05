@@ -16,9 +16,15 @@
 
 import os
 
-from utils import read_css, _BRANCH_CLOSED_PNG, _BRANCH_END_PNG, _BRANCH_MORE_PNG, _BRANCH_OPEN_PNG, _BRANCH_VINE_PNG
-
+from utils import read_css
 from third_party.Qt import QtWidgets, QtCore, QtGui
+from paths import (
+    _BRANCH_CLOSED_PNG,
+    _BRANCH_END_PNG,
+    _BRANCH_MORE_PNG,
+    _BRANCH_OPEN_PNG,
+    _BRANCH_VINE_PNG
+)
 
 
 class CustomTreeWidget(QtWidgets.QTreeWidget):
