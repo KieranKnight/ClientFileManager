@@ -120,7 +120,7 @@ class AddConfigurationWidgets(QtWidgets.QWidget):
         return self._integrate_location_changeBtn
 
     @property
-    def configuration(self):
+    def add_configuration(self):
         return self._configuration
 
     def set_integrate_location_label(self, value):
@@ -135,13 +135,13 @@ class AddConfigurationWidgets(QtWidgets.QWidget):
         spacer = QtWidgets.QSpacerItem(20, 20)
 
         self._integrate_location_label = QtWidgets.QLabel()
-        self._integrate_location_label.setText('Output Location: {}'.format(self.configuration.output_location))
+        self._integrate_location_label.setText('Output Location: {}'.format(self.add_configuration.output_location))
         self._integrate_location_changeBtn = QtWidgets.QPushButton()
         self._integrate_location_changeBtn.setMaximumHeight(23)
         self._integrate_location_changeBtn.setText('Change')
 
         self._logging_location_label = QtWidgets.QLabel()
-        self._logging_location_label.setText('Logging Location: {}'.format(self.configuration.logging_location))
+        self._logging_location_label.setText('Logging Location: {}'.format(self.add_configuration.logging_location))
         self._logging_location_changeBtn = QtWidgets.QPushButton()
         self._logging_location_changeBtn.setMaximumHeight(23)
         self._logging_location_changeBtn.setText('Change')
@@ -149,7 +149,7 @@ class AddConfigurationWidgets(QtWidgets.QWidget):
         self._logging_status = QtWidgets.QLabel()
         self._logging_status.setText('Logging: ')
         self._logging_status_checkBox = QtWidgets.QCheckBox()
-        self._logging_status_checkBox.setChecked(self.configuration.logging)
+        self._logging_status_checkBox.setChecked(self.add_configuration.logging)
 
         self._h_layout.addWidget(self._integrate_location_label)
         self._h_layout.addWidget(self._integrate_location_changeBtn)

@@ -33,6 +33,11 @@ from utils import (
 
 
 class IntegrateConfigure(object):
+    """
+    Main configuration object.
+    This object is ran once the tool is loaded, besides the get_seq_shot_folders
+    which can be called throughout the main launch_manager module.
+    """
     def __init__(self):
         super(IntegrateConfigure, self).__init__()
         self._configuration = read_json(_UI_CONFIGURATION)
@@ -49,6 +54,10 @@ class IntegrateConfigure(object):
     def output_location(self):
         return self._output_location
 
+    @output_location.setter
+    def output_location(self, value):
+        self._output_location = value
+
     @property
     def output_subfolders(self):
         return self._output_subfolders
@@ -57,11 +66,19 @@ class IntegrateConfigure(object):
     def logging_location(self):
         return self._logging_location
 
+    @logging_location.setter
+    def logging_location(self, value):
+        self._logging_location = value
+
     @property
     def configuration(self):
         return self._configuration
 
     def check_configuration(self):
+        """
+        Checking the configuration file to set the options 
+        on the main UI itself.
+        """
         if not os.path.exists(_APP_LOCATION):
             os.makedirs(_APP_LOCATION)
         if not os.path.exists(_UI_CONFIGURATION):
@@ -71,11 +88,20 @@ class IntegrateConfigure(object):
             os.makedirs(_LOGGING_LOCATION)
     
     def read_congifuration(self):
+        """
+        Readling the configuration file and setting the widget property values.
+        """
         self._logging = True if self.configuration['loggingStatus'] == 'True' else False
         self._output_location = self.configuration['outputLocation']
         self._logging_location = self.configuration['loggingLocation']
 
     def get_seq_shot_folders(self):
+        """
+        When the tool loads or when the output location has been changed,
+        this method is ran to collect the top and sub folder of the new output location.
+        This gives users the option to select folders as a sequence and shot option.
+        Users are still able to write their own Sequence and Shot folders ontop of this too.
+        """
         self._output_subfolders = {}
 
         if not os.path.exists(self.output_location):
@@ -96,8 +122,51 @@ class IntegrateConfigure(object):
                     for shot in _shot:
                         self._output_subfolders[os.path.join(self.output_location, seq)].append(os.path.join(self.output_location, shot))
 
+    def update_all_items(self, main):
+        """
+        Function to update all QTreeItems to a newly updated output location
+        ie. getting the sequence and shot data to populate into the UI.
+
+        Args:
+            main (The QTreeWidget): The main QTreeWidget to loop through
+        """
+        for child in range(main.childCount()):
+            _item = main.child(child)
+            _item.sequence.clear()
+            _sub_item = _item.childCount()
+            self.add_updates_items(_item)
+            if not _sub_item:
+                continue
+            for sub in range(_sub_item):
+                _sub_widget = _item.child(sub)
+                _sub_widget.sequence.clear()
+                self.add_updates_items(_sub_widget)
+
+    def add_updates_items(self, item):
+        """
+        For loop to update and add all new sequence items to 
+        the QTreeWidgets.
+
+        Args:
+            item (CustomTreeItem): The Item that will be getting the new
+                updates added to.
+        """
+        {
+            _item.sequence.addItem(str(os.path.basename(key)))
+            for (key, value) in self.output_subfolders.items()
+        }
+
 
 class ConfigureFilesData(object):
+    """
+    Configuration object for client files that get added to the application
+    Object tries to figuration a naming convention for the client file.
+    It is a best guess situation however, the users are able to manipulate this
+    if they are not quite happy with the convention that gets calculated.
+
+    Returns:
+        ConfigureFilesData Obj: The object itself.
+    """
     _NAME_REGEX = r'(\w+?)|(\w+?)(\d+)|(\w+?)(_\d+)'
     def __init__(self, file, folder, parent_folder=None):
         super(ConfigureFilesData, self).__init__()

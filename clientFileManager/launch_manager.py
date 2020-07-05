@@ -36,7 +36,7 @@ from integrate.integrate_files import IntegrateFiles
 from third_party.Qt import QtWidgets, QtCore, QtGui
 
 # Application - utils
-from utils import open_file, open_folder, write_json, _USER_DOCUMENTS, _DEFAULT_CONFIG
+from utils import open_file, open_folder, write_json, read_css, _USER_DOCUMENTS, _DEFAULT_CONFIG
 
 
 class ClientFileManager(QtWidgets.QMainWindow):
@@ -46,6 +46,7 @@ class ClientFileManager(QtWidgets.QMainWindow):
         
         # setting up the UI 
         self.setWindowTitle(self._OBJ_NAME)
+        self.setStyleSheet(read_css())
         self.centralwidget = QtWidgets.QWidget(self)
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
 
@@ -77,7 +78,7 @@ class ClientFileManager(QtWidgets.QMainWindow):
 
         self.build_connections()
 
-        self._output_locations = self.configuration_widgets.configuration.output_subfolders
+        self._output_locations = self.configuration_widgets.add_configuration.output_subfolders
     
     def build_connections(self):
         self.configuration_widgets.logging_location_changeBtn.clicked.connect(self.change_logging_location)
@@ -94,15 +95,26 @@ class ClientFileManager(QtWidgets.QMainWindow):
             print('No Folder has been selected.')
             return
         self.configuration_widgets.set_integrate_location_label(selected_folder)
-
+        self.configuration_widgets.add_configuration.output_location = selected_folder
+        self.configuration_widgets.add_configuration.get_seq_shot_folders()
+        root = self.tree_widget.invisibleRootItem()
+        child_count = root.childCount()
+        if not child_count:
+            print('No Client Files have been added.')
+            return
+        self.configuration_widgets.add_configuration.update_all_items(root)
+        
     def change_logging_location(self):
         selected_folder = open_folder(self, 'Change Folder', _USER_DOCUMENTS, 'All Folders (*)')
         if not selected_folder:
             print('No Folder has been selected.')
             return
         self.configuration_widgets.set_logging_location_label(selected_folder)
+        self.configuration_widgets.add_configuration.logging_location = selected_folder
 
     def save_configuration_overrides(self):
+        _logging_location = self.configuration_widgets.logging_location_label.text().replace('Logging Location: ', '')
+        _output_location = self.configuration_widgets.integrate_location_label.text().replace('Output Location: ', '')
         _DEFAULT_CONFIG = {
             'loggingLocation': self.configuration_widgets.logging_location_label.text().replace('Logging Location: ', ''),
             'outputLocation': self.configuration_widgets.integrate_location_label.text().replace('Output Location: ', ''),
@@ -152,7 +164,7 @@ def launchUI():
     """
     app = QtWidgets.QApplication(sys.argv)
     ui = ClientFileManager()
-    ui.resize(1200, 500)
+    ui.resize(1200, 650)
     ui.show()
     sys.exit(app.exec_())
 

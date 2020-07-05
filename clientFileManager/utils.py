@@ -30,6 +30,14 @@ _UI_CONFIG_FOLDER = str(Path(_APP_LOCATION, 'ui_configuration'))
 _UI_CONFIGURATION = str(Path(_UI_CONFIG_FOLDER, 'configuration.json'))
 _LOGGING_LOCATION = str(Path(_APP_LOCATION, 'logging'))
 _INTEGRATE_LOCATION = str(Path(_APP_LOCATION, 'integrate'))
+_UI_LOCATION = str(Path(_ROOT, 'ui_items'))
+_CSS = str(Path(_UI_LOCATION, 'ui_style_sheet.css'))
+_ICONS = str(Path(_UI_LOCATION, 'icons'))
+_BRANCH_CLOSED_PNG = str(Path(_ICONS, 'branch_closed.png')) if not sys.platform == 'win32' else str(Path(_ICONS, 'branch_closed.png')).replace('\\', '/')
+_BRANCH_END_PNG = str(Path(_ICONS, 'branch_end.png')) if not sys.platform == 'win32' else str(Path(_ICONS, 'branch_end.png')).replace('\\', '/')
+_BRANCH_MORE_PNG = str(Path(_ICONS, 'branch_more.png')) if not sys.platform == 'win32' else str(Path(_ICONS, 'branch_more.png')).replace('\\', '/')
+_BRANCH_OPEN_PNG = str(Path(_ICONS, 'branch_open.png')) if not sys.platform == 'win32' else str(Path(_ICONS, 'branch_open.png')).replace('\\', '/')
+_BRANCH_VINE_PNG = str(Path(_ICONS, 'branch_vine.png')) if not sys.platform == 'win32' else str(Path(_ICONS, 'branch_vine.png')).replace('\\', '/')
 
 _INGEST_FOLDERS = [
         'Elements', 
@@ -100,6 +108,17 @@ def combine_lists(list_one, list_two):
     return list_one + list(set(list_two) - set(list_one))
 
 
+def read_css(css_file=_CSS):
+    """
+    Reading the CSS file for the application
+
+    Returns:
+        _css : The CSS sheet for the application
+    """
+    with open(_CSS) as css:
+        _css = css.read()
+    return _css
+
 def read_json(json_file):
     """
     Reading the contents of a json file.
@@ -128,4 +147,3 @@ def write_json(data):
     """
     with open(_UI_CONFIGURATION, 'w') as json_file:
         json.dump(data, json_file)
-

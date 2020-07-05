@@ -16,6 +16,8 @@
 
 import os
 
+from utils import read_css, _BRANCH_CLOSED_PNG, _BRANCH_END_PNG, _BRANCH_MORE_PNG, _BRANCH_OPEN_PNG, _BRANCH_VINE_PNG
+
 from third_party.Qt import QtWidgets, QtCore, QtGui
 
 
@@ -31,6 +33,24 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
         CustomTreeWidget -- Object linking to the widget and items created.
     """
     _HEADERS = ['Folder', 'filename', 'Sequence', 'Shot', 'Location', 'Option']
+    _OVERRIDE_STYLE = "QTreeView::branch:has-siblings:!adjoins-item " \
+        "{border-image: url('%s') 0;}" \
+        "QTreeView::branch:has-siblings:adjoins-item " \
+        "{border-image: url('%s') 0;}" \
+        "QTreeView::branch:!has-children:!has-siblings:adjoins-item " \
+        "{border-image: url('%s') 0;}" \
+        "QTreeView::branch:has-children:!has-siblings:closed, " \
+        "QTreeView::branch:closed:has-children:has-siblings " \
+        "{border-image: none; image: url('%s');}" \
+        "QTreeView::branch:open:has-children:!has-siblings, " \
+        "QTreeView::branch:open:has-children:has-siblings " \
+        "{border-image: none; image: url('%s');}" % (
+            _BRANCH_VINE_PNG,
+            _BRANCH_MORE_PNG, 
+            _BRANCH_END_PNG,
+            _BRANCH_CLOSED_PNG,
+            _BRANCH_OPEN_PNG
+        )
     def __init__(self, parent=None):
         """
         Sorting through the data within the initial method
@@ -40,7 +60,9 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
             parent {QMainWindow} -- The main application window to attach to(default: {None})
         """
         super(CustomTreeWidget, self).__init__(parent)
-        
+
+        self.setStyleSheet(self._OVERRIDE_STYLE)   
+
         self._data = None
         self._widgets = []
         self._parent = parent
@@ -60,6 +82,7 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
         self.headerItem().setTextAlignment(2, QtCore.Qt.AlignCenter)
         self.headerItem().setTextAlignment(3, QtCore.Qt.AlignCenter)
         self.headerItem().setTextAlignment(4, QtCore.Qt.AlignCenter)
+        self.headerItem().setTextAlignment(5, QtCore.Qt.AlignCenter)
         
     @property
     def headers(self):
@@ -131,6 +154,8 @@ class CustomTreeItem(QtWidgets.QTreeWidgetItem):
         QtWidgets {QTreeWidgetItem} -- Inheriting the base QTreeWidgetItem
     """
     _OPTIONS = ['Plate', 'Texture', 'Model', 'Mocap', 'Reference', 'Ignore']
+    _IGNORE_STYLE = 'background-color: orange;'
+    _REGULAR_STYLE = 'background-color: #0B1C2D; border: 1.5px solid #32414B'
 
     def __init__(self, parent=None):
         """
@@ -141,7 +166,7 @@ class CustomTreeItem(QtWidgets.QTreeWidgetItem):
             parent {QMainWindow | CustomTreeWidget} -- The main parernt object.(default: {None})
         """
         super(CustomTreeItem, self).__init__(parent)
-
+        
         self._item_contents = None
         self._header = False
         self._folder = None
@@ -213,7 +238,7 @@ class CustomTreeItem(QtWidgets.QTreeWidgetItem):
         self._sequence = ''
         self._shot = ''
         self._app_config = app_config
-        self._location = app_config.configuration.output_location
+        self._location = app_config.add_configuration.output_location
 
     def build_subitem_values(self, item, single, app_config):
         """
@@ -243,7 +268,7 @@ class CustomTreeItem(QtWidgets.QTreeWidgetItem):
         self._sequence = self._item_contents.sequence
         self._shot = self._item_contents.shot
         self._app_config = app_config
-        self._location = app_config.configuration.output_location
+        self._location = app_config.add_configuration.output_location
 
     def build_widget_items(self, top_item):
         """
@@ -273,7 +298,7 @@ class CustomTreeItem(QtWidgets.QTreeWidgetItem):
         top_item.setItemWidget(self, 2, self._sequence_widget)
         {
             self._sequence_widget.addItem(os.path.basename(key)) 
-            for (key, value) in self._app_config.configuration.output_subfolders.items()
+            for (key, value) in self._app_config.add_configuration.output_subfolders.items()
         }
         self._sequence_widget.currentIndexChanged.connect(self.update_shot_wdgs)
  
@@ -285,7 +310,7 @@ class CustomTreeItem(QtWidgets.QTreeWidgetItem):
 
         ## Column 3 - Location
         self._location_widget = QtWidgets.QComboBox()
-        self._location_widget.addItem(self._location)
+        self._location_widget.addItem(str(self._location))
         self._location_widget.setEditable(True)
         top_item.setItemWidget(self, 4, self._location_widget)
 
@@ -294,6 +319,7 @@ class CustomTreeItem(QtWidgets.QTreeWidgetItem):
         [self._option_widget.addItem(option) for option in self._OPTIONS]
         top_item.setItemWidget(self, 5, self._option_widget)
 
+        self.option_override()
         self._option_widget.currentIndexChanged.connect(self.option_override)
 
         if self._header:
@@ -305,19 +331,19 @@ class CustomTreeItem(QtWidgets.QTreeWidgetItem):
     def update_shot_wdgs(self):
         try:
             _shots = [
-                value for (key, value) in self._app_config.configuration.output_subfolders.items()
+                value for (key, value) in self._app_config.add_configuration.output_subfolders.items()
                 if os.path.basename(key) == self.sequence.currentText()
                 ][0]
-            
+            self.shot.clear()
             [self.shot.addItem(os.path.basename(widget)) for widget in _shots]
         except:
             pass
 
     def option_override(self):
         [
-            wdg.setStyleSheet('background-color: orange') 
+            wdg.setStyleSheet(self._IGNORE_STYLE) 
             if self.option.currentText() == 'Ignore' else 
-            wdg.setStyleSheet('background-color:') 
+            wdg.setStyleSheet(self._REGULAR_STYLE) 
             for wdg in self.items
         ]
 
@@ -328,9 +354,9 @@ class CustomTreeItem(QtWidgets.QTreeWidgetItem):
         The option widget...
         """
         [
-            wdg.setStyleSheet('background-color: orange') 
+            wdg.setStyleSheet(self._IGNORE_STYLE) 
             if self.option.currentText() == 'Ignore' else 
-            wdg.setStyleSheet('background-color:') 
+            wdg.setStyleSheet(self._REGULAR_STYLE) 
             for wdg in self.items
         ]
 
@@ -338,9 +364,9 @@ class CustomTreeItem(QtWidgets.QTreeWidgetItem):
             self.child(child).option.setCurrentIndex(self._option_widget.currentIndex())
             for wdg in self.child(child).items:
                 if self.option.currentText() == 'Ignore':
-                    wdg.setStyleSheet('background-color: orange')
+                    wdg.setStyleSheet(self._IGNORE_STYLE)
                 else:
-                    wdg.setStyleSheet('background-color:')
+                    wdg.setStyleSheet(self._REGULAR_STYLE)
 
     def header_location_override(self):
         """
