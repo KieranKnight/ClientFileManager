@@ -160,7 +160,7 @@ class CustomTreeItem(QtWidgets.QTreeWidgetItem):
         QtWidgets {QTreeWidgetItem} -- Inheriting the base QTreeWidgetItem
     """
     _OPTIONS = ['Plate', 'Texture', 'Model', 'Mocap', 'Reference', 'Ignore']
-    _IGNORE_STYLE = 'background-color: orange;'
+    _IGNORE_STYLE = 'background-color: #885007;  border: 1.5px solid #32414B'
     _REGULAR_STYLE = 'background-color: #0B1C2D; border: 1.5px solid #32414B'
 
     def __init__(self, parent=None):

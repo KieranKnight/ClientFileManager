@@ -79,19 +79,6 @@ def open_folder(instance, title, location, filter):
     return Path(dialog.selectedFiles()[0])
 
 
-def combine_lists(list_one, list_two):
-    """
-    Combining two lists together and returning
-    a new list that contains both sets of data but
-    has no duplicates.
-    
-    Arguments:
-        list_one {list} -- The list the second one will be added two.
-        list_two {list} -- The list of contents you want to add to the first.
-    """
-    return list_one + list(set(list_two) - set(list_one))
-
-
 def read_css(css_file=_CSS):
     """
     Reading the CSS file for the application
@@ -102,6 +89,7 @@ def read_css(css_file=_CSS):
     with open(_CSS) as css:
         _css = css.read()
     return _css
+
 
 def read_json(json_file):
     """

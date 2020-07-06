@@ -100,6 +100,10 @@ class AddConfigurationWidgets(QtWidgets.QWidget):
         self.build_widget()
 
     @property
+    def logger(self):
+        return self._configuration.logger
+
+    @property
     def logging_status_checkBox(self):
         return self._logging_status_checkBox
     
@@ -149,7 +153,7 @@ class AddConfigurationWidgets(QtWidgets.QWidget):
         self._logging_status = QtWidgets.QLabel()
         self._logging_status.setText('Logging: ')
         self._logging_status_checkBox = QtWidgets.QCheckBox()
-        self._logging_status_checkBox.setChecked(self.add_configuration.logging)
+        self._logging_status_checkBox.setChecked(self.add_configuration.logging_option)
 
         self._h_layout.addWidget(self._integrate_location_label)
         self._h_layout.addWidget(self._integrate_location_changeBtn)

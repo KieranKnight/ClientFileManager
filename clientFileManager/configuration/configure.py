@@ -18,6 +18,7 @@ import os
 import re
 import sys
 import json
+import logging
 from pathlib import Path
 
 # Application
@@ -32,6 +33,7 @@ from paths import (
     _UI_CONFIGURATION,
     _LOGGING_LOCATION
 )
+from logger.application_logging import ApplicationLogger
 
 
 class IntegrateConfigure(object):
@@ -47,10 +49,16 @@ class IntegrateConfigure(object):
         self.check_configuration()
         self.read_congifuration()
         self.get_seq_shot_folders()
+
+        self.application_logger = ApplicationLogger()
+
+    @property
+    def logger(self):
+        return self.application_logger
     
     @property
-    def logging(self):
-        return self._logging
+    def logging_option(self):
+        return self._logging_option
 
     @property
     def output_location(self):
@@ -93,7 +101,7 @@ class IntegrateConfigure(object):
         """
         Readling the configuration file and setting the widget property values.
         """
-        self._logging = True if self.configuration['loggingStatus'] == 'True' else False
+        self._logging_option = True if self.configuration['loggingStatus'] == 'True' else False
         self._output_location = self.configuration['outputLocation']
         self._logging_location = self.configuration['loggingLocation']
 
