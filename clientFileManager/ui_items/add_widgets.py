@@ -1,9 +1,30 @@
-from configuration.configure import IntegrateConfigure
+# -*- coding: utf-8 -*-
 
+################################################################################
+## Client File Manager TOOL - Ingesting client files into a production pipeline
+##  with tracking, logging and configuration overrides.
+##
+## File : add_widgets.py
+## Description : Module to add widgets to the main application UI
+##
+## Created by: Kieran Knight
+## Email: kieransknight@gmail.com
+## 
+################################################################################
+
+# Application
+from configuration.configure import IntegrateConfigure
 from third_party.Qt import QtWidgets, QtCore, QtGui
 
 
 class GroupWidgets(QtWidgets.QGroupBox):
+    """
+    Class that takes a list of widgets and places the contents
+    into a QGroupBox
+
+    Args:
+        QtWidgets.QGroupBox (QGroupBox): Inheriting from QT's QGroupBox
+    """
     def __init__(self, widgets, title, margin=0, parent=None):
         super(GroupWidgets, self).__init__(title, parent)
         self.setFlat(True)
@@ -13,18 +34,38 @@ class GroupWidgets(QtWidgets.QGroupBox):
 
 
 class BaseAddItems(QtWidgets.QWidget):
+    """
+    Base class that all/most UI widgets should inherit from
+
+    Args:
+        QtWidgets.QWidget (QWidget): Inheriting from QT's QWidget
+
+    Raises:
+        NotImplementedError: All inheriting classes should include the 
+            build_widget method
+    """
     _ATTRIBUTE_CLASSES = [property]
     def __init__(self, parent):
         super(BaseAddItems, self).__init__(parent)
 
-        self._h_layout = QtWidgets.QHBoxLayout()
-        self.build_widget()
-        self.set_layout()
+        self._h_layout = QtWidgets.QHBoxLayout()  # setting the main layout
+        self.build_widget()  # building the widget contents
+        self.set_layout()  # adding all items to the main layout
         
     def build_widget(self):
         raise NotImplementedError
 
     def _get_properties(self):
+        """
+        Method loops through all property items of the inheriting classes
+        and returns a dictionay of the avaliable properties and their values
+
+        Note: All properties should be a QT Widget so they are correctly added
+        to the main layout.
+
+        Returns:
+            dict: Dictionary of all properties
+        """
         _widgets = {}
         for name in dir(self.__class__):
             if name.startswith('__'):
@@ -36,11 +77,18 @@ class BaseAddItems(QtWidgets.QWidget):
         return _widgets
 
     def set_layout(self):
+        """
+        Setting all found widgets to the main layout.
+        """
         [self._h_layout.addWidget(item) for key,item in self._get_properties().items()]
         self.setLayout(self._h_layout)
 
 
 class AddClientItemsButtons(BaseAddItems):
+    """
+    Class that adds Client item buttons to the main UI.
+    This class is for the add file, add folder and remove items.
+    """
     def __init__(self, parent=None):
         super(AddClientItemsButtons, self).__init__(parent)
 
@@ -57,6 +105,9 @@ class AddClientItemsButtons(BaseAddItems):
         return self._remove_btn
 
     def build_widget(self):
+        """
+        Building the widgets for client items.
+        """
         self._add_file_btn = QtWidgets.QPushButton()
         self._add_file_btn.setText('Add Single Client File')
         
@@ -68,6 +119,9 @@ class AddClientItemsButtons(BaseAddItems):
 
 
 class AddIntegrateButton(BaseAddItems):
+    """
+    Class that adds the Integrate button to the main UI
+    """
     def __init__(self, parent=None):
         super(AddIntegrateButton, self).__init__(parent)
 
@@ -81,6 +135,9 @@ class AddIntegrateButton(BaseAddItems):
 
 
 class AddSaveConfigurationWidget(BaseAddItems):
+    """
+    Class that add the save configuration button
+    """
     def __init__(self, parent=None):
         super(AddSaveConfigurationWidget, self).__init__(parent)
 
@@ -94,6 +151,13 @@ class AddSaveConfigurationWidget(BaseAddItems):
 
 
 class AddConfigurationWidgets(QtWidgets.QWidget):
+    """
+    Class that adds the main Configuration widgets.
+
+    Note: This class does not inherit from the BaseAddItems.
+    This is intentional as a different set of requirements is needed
+    for this functionality to display as intended
+    """
     def __init__(self, parent=None):
         super(AddConfigurationWidgets, self).__init__(parent)
         self._configuration = IntegrateConfigure()

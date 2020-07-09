@@ -4,7 +4,7 @@
 ## Client File Manager TOOL - Ingesting client files into a production pipeline
 ##  with tracking, logging and configuration overrides.
 ##
-## File : customTreeWidget.py
+## File : custom_tree_widget.py
 ## Description : A Custom tree widget to display items to ingest into a
 ##  production pipeline. Top widget will be the selected folder, widgets
 ##  below will be the folders items. Single items will be one widget.
@@ -14,8 +14,10 @@
 ## 
 ################################################################################
 
+# Python Modules
 import os
 
+# Application
 from utils import read_css
 from third_party.Qt import QtWidgets, QtCore, QtGui
 from paths import (
@@ -83,6 +85,7 @@ class CustomTreeWidget(QtWidgets.QTreeWidget):
         self.setColumnWidth(4, 350)
         self.setColumnWidth(5, 100)
 
+        # Setting the alignment of the header files
         self.headerItem().setTextAlignment(0, QtCore.Qt.AlignCenter)
         self.headerItem().setTextAlignment(1, QtCore.Qt.AlignCenter)
         self.headerItem().setTextAlignment(2, QtCore.Qt.AlignCenter)
@@ -328,6 +331,8 @@ class CustomTreeItem(QtWidgets.QTreeWidgetItem):
         self.option_override()
         self._option_widget.currentIndexChanged.connect(self.option_override)
 
+        # If the header file is passed, some overrides need to be set to allow 
+        # an easier override option for all sub items
         if self._header:
             self._option_widget.currentIndexChanged.connect(self.header_option_override)
             self._location_widget.currentTextChanged.connect(self.header_location_override)
@@ -335,6 +340,11 @@ class CustomTreeItem(QtWidgets.QTreeWidgetItem):
             self._shot_widget.currentTextChanged.connect(self.header_shot_override)
 
     def update_shot_wdgs(self):
+        """
+        Updating teh shot widgets.
+        silent Try excpet added incase location isn't changed.
+        This doesn't mean the code has failed, just stops an unexpected override.
+        """
         try:
             _shots = [
                 value for (key, value) in self._app_config.add_configuration.output_subfolders.items()
@@ -346,6 +356,10 @@ class CustomTreeItem(QtWidgets.QTreeWidgetItem):
             pass
 
     def option_override(self):
+        """
+        Overriding the style sheet based on whether the widget option is
+        set to either ignore or other.
+        """
         [
             wdg.setStyleSheet(self._IGNORE_STYLE) 
             if self.option.currentText() == 'Ignore' else 

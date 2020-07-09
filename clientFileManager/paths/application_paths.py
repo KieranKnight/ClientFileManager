@@ -1,3 +1,17 @@
+# -*- coding: utf-8 -*-
+
+################################################################################
+## INGEST TOOL - PLACING FILES INTO A DESIRED LOCATION AND TRACKING THEM
+##
+## File : application_paths.py
+## Description : The main module for application paths.
+##
+## Created by: Kieran Knight
+## Email: kieransknight@gmail.com
+## 
+################################################################################
+
+
 import os
 import sys
 from pathlib import Path

@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## INGEST TOOL - PLACING FILES INTO A DESIRED LOCATION AND TRACKING THEM
+## Client File Manager TOOL - Ingesting client files into a production pipeline
+##  with tracking, logging and configuration overrides.
 ##
 ## File : integrate_files.py
-## Description : Taking the files that have been added to the UI and placing 
-##               them into the desired locations on disk.
+## Description : The main module where files get integrated from.
 ##
 ## Created by: Kieran Knight
 ## Email: kieransknight@gmail.com
 ## 
 ################################################################################
-
 
 # Python Modules
 import os
@@ -19,9 +18,18 @@ import sys
 import subprocess
 
 class IntegrateFiles(object):
-    def __init__(self, root, children, ui_main=None, app_logging=False, save_logging=False):
+    """
+    Main class that integrates the files from the input location
+    to the desired location on disk
+    """
+    def __init__(
+        self, root, children, 
+        ui_main=None, app_logging=False, save_logging=False
+        ):
         super(IntegrateFiles, self).__init__()
 
+        self._complete = []
+        self._ignored = []
         self._failed = []
 
         self._root = root
@@ -30,9 +38,11 @@ class IntegrateFiles(object):
         self._app_logging = app_logging
         self._save_logging = save_logging
 
-        _can_run = self.check_all_integration()
-        if not _can_run:
-            return
+        self.check_all_integration()
+        if self._save_logging:
+            self._save_logging.completed_files(self._complete)
+            self._save_logging.failed_files(self._failed)
+            self._save_logging.ignored_files(self._ignored)
 
     def check_all_integration(self):
         """
@@ -52,14 +62,17 @@ class IntegrateFiles(object):
                     _item.item_contents.file_path
                 )
                 self._app_logging.info(_msg)
+                self._ignored.append(_item)
                 continue
             if not _sub_item:
                 _msg = '{} - Checking widget is set correctly'.format(_item.item_contents.file_path)
                 self._app_logging.info(_msg)
                 _paths = self.check_paths(_item)
                 if not _paths:
-                    return False
+                    self._failed.append(_item)
+                    continue
                 self._run(_item)
+                self._complete.append(_item)
             for sub in range(_sub_item):
                 _sub_widget = _item.child(sub)
                 if _sub_widget.option.currentText() == 'Ignore':
@@ -67,15 +80,28 @@ class IntegrateFiles(object):
                         _sub_widget.item_contents.file_path
                     )
                     self._app_logging.info(_msg)
+                    self._ignored.append(_sub_widget)
                     continue
                 _sub_paths = self.check_paths(_sub_widget)
                 if not _sub_paths:
-                    return False
+                    self._failed.append(_sub_widget)
+                    continue
                 self._run(_sub_widget)
+                self._complete.append(_sub_widget)
                 if not self._failed:
                     self.update_all_widgets(_item)
 
     def check_paths(self, item):
+        """
+        Checking the path of the passed item to make sure
+        it has been setup correctly.p
+
+        Args:
+            item ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
         if not item.sequence.currentText() and not item.shot.currentText() and not item.location.currentText():
             self._app_logging.error('Sequence, Shot and Location are required to Integrate client files correctly.\' \
                 nPlease make sure these are filled out correctly')
@@ -99,6 +125,7 @@ class IntegrateFiles(object):
             self._app_logging.error('Folder does not exist - Creating required folder')
             os.makedirs(_output_seq_shot)
         
+        # copying the files through subprocess
         src = os.path.join(c_file.item_contents.folder, c_file.filename.text())
         dst = os.path.join(_output_seq_shot, c_file.option.currentText(), c_file.filename.text())
         _cmd = 'cmd /c echo F | xcopy /R /Y /K "{src}" "{dst}"'.format(src=src, dst=dst)

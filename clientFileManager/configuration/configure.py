@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## INGEST TOOL - PLACING FILES INTO A DESIRED LOCATION AND TRACKING THEM
+## Client File Manager TOOL - Ingesting client files into a production pipeline
+##  with tracking, logging and configuration overrides.
 ##
 ## File : configure.py
 ## Description : This file is to handle default and any configuration files the
@@ -130,7 +131,8 @@ class IntegrateConfigure(object):
                 else:
                     self._output_subfolders[os.path.join(self.output_location, seq)] = []
                     for shot in _shot:
-                        self._output_subfolders[os.path.join(self.output_location, seq)].append(os.path.join(self.output_location, shot))
+                        self._output_subfolders[
+                            os.path.join(self.output_location, seq)].append(os.path.join(self.output_location, shot))
 
     def update_all_items(self, main):
         """
@@ -143,13 +145,17 @@ class IntegrateConfigure(object):
         for child in range(main.childCount()):
             _item = main.child(child)
             _item.sequence.clear()
+            _item.location.clear()
             _sub_item = _item.childCount()
             self.add_updates_items(_item)
+            _item.location.addItem(str(self.output_location))
             if not _sub_item:
                 continue
             for sub in range(_sub_item):
                 _sub_widget = _item.child(sub)
                 _sub_widget.sequence.clear()
+                _sub_widget.location.clear()
+                _sub_widget.location.addItem(str(self.output_location))
                 self.add_updates_items(_sub_widget)
 
     def add_updates_items(self, item):
@@ -243,6 +249,11 @@ class ConfigureFilesData(object):
 
 
 class ConfigureFiles(object):
+    """
+    Configure Files class. This class is the main holder 
+    of all files and folder that get configured when added
+    to the application.
+    """
     def __init__(self, folder=None):
         super(ConfigureFiles, self).__init__()
         

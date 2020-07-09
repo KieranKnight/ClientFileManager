@@ -20,10 +20,10 @@ import sys
 from configuration.configure import ConfigureFiles
 from third_party.Qt import QtWidgets, QtCore, QtGui
 from integrate.integrate_files import IntegrateFiles
-from ui_items.customTreeWidget import CustomTreeWidget
+from ui_items.custom_tree_widget import CustomTreeWidget
 from logger.application_logging import IntegrateLogger
 from paths import _USER_DOCUMENTS
-from ui_items.addWidgets import (
+from ui_items.add_widgets import (
     GroupWidgets, 
     AddClientItemsButtons, 
     AddIntegrateButton, 
@@ -76,10 +76,11 @@ class ClientFileManager(QtWidgets.QMainWindow):
         self.setCentralWidget(self.centralwidget)
 
         self.build_connections()
-
-        self._output_locations = self.configuration_widgets.add_configuration.output_subfolders
     
     def build_connections(self):
+        """
+        Building the connections for the main UI
+        """
         self.configuration_widgets.logging_location_changeBtn.clicked.connect(self.change_logging_location)
         self.configuration_widgets.integrate_location_changeBtn.clicked.connect(self.change_integrate_location)
         self.save_configuration.save_configuration.clicked.connect(self.save_configuration_overrides)
@@ -89,30 +90,50 @@ class ClientFileManager(QtWidgets.QMainWindow):
         self.integrate_buttons.integrate_btn.clicked.connect(self.integrate_client_files)
 
     def change_integrate_location(self):
+        """
+        Changing the integration location.
+        This changes where the files are going to get processed to.
+        """
         selected_folder = open_folder(self, 'Change Folder', _USER_DOCUMENTS, 'All Folders (*)')
         if not selected_folder:
             self.configuration_widgets.logger.warning('No Folder has been selected.')
             return
+        # Setting the labels with the new folder
         self.configuration_widgets.set_integrate_location_label(selected_folder)
         self.configuration_widgets.add_configuration.output_location = selected_folder
+        # Collecting the top and sub folder from the new location
         self.configuration_widgets.add_configuration.get_seq_shot_folders()
         self.configuration_widgets.logger.info('Integration Location Changed.')
+        # Checking for child items
         root = self.tree_widget.invisibleRootItem()
         child_count = root.childCount()
         if not child_count:
             return
+        # Updating all of the sequence and shot widgets with the new top and sub
+        # folders found from the new selected folder
         self.configuration_widgets.add_configuration.update_all_items(root)
         
     def change_logging_location(self):
+        """
+        Changing the logging location of the application.
+        This creates a log file wherever the users chooses to.
+        """
         selected_folder = open_folder(self, 'Change Folder', _USER_DOCUMENTS, 'All Folders (*)')
         if not selected_folder:
             self.configuration_widgets.logger.warning('No Folder has been selected.')
-            return
+            return  
+        # Setting the labels for the logging outputs
         self.configuration_widgets.set_logging_location_label(selected_folder)
         self.configuration_widgets.add_configuration.logging_location = selected_folder
         self.configuration_widgets.logger.info('Logging Location Changed.')
 
     def save_configuration_overrides(self):
+        """
+        Saving the configuration file
+        Any updates that have been made to either the integration location
+        or the logging location. Users have the option to have this so the next time
+        the UI is loaded, it will load these values by default
+        """
         _logging_location = self.configuration_widgets.logging_location_label.text().replace('Logging Location: ', '')
         _output_location = self.configuration_widgets.integrate_location_label.text().replace('Output Location: ', '')
         _DEFAULT_CONFIG = {
@@ -124,26 +145,39 @@ class ClientFileManager(QtWidgets.QMainWindow):
         write_json(_DEFAULT_CONFIG)
 
     def open_file(self):
+        """
+        Opening a file dialog and adding the file item to the Tree Widget
+        """
         selected_file = open_file(self, 'Add File', _USER_DOCUMENTS, 'All Files (*)')
         if not selected_file:
             self.configuration_widgets.logger.warning('No file has been selected.')
             return
         self.configuration_widgets.logger.info('Processing File - {}'.format(selected_file))
+        # Passing the selected item to the configure module to be processed
         _configure_object = ConfigureFiles(folder=os.path.dirname(selected_file))
         _configure_object.single_file(selected_file)
+        # Adding the file
         self.tree_widget.add_items(_configure_object, self.configuration_widgets)
 
     def open_folder(self):
+        """
+        Opening a file dialog and adding the folder to the Tree Widget
+        """
         selected_folder = open_folder(self, 'Add Folder', _USER_DOCUMENTS, 'All Folders (*)')
         if not selected_folder:
             self.configuration_widgets.logger.warning('No Folder has been selected.')
             return
         self.configuration_widgets.logger.info('Processing Folder - {}'.format(selected_folder))
+        # Passing the selected folder to the configure module to be processed
         _configure_object = ConfigureFiles(folder=selected_folder)
         _configure_object.folder_files(selected_folder) 
+        # Adding the folder
         self.tree_widget.add_items(_configure_object, self.configuration_widgets)
 
     def remove_selected(self):
+        """
+        Removing the selected widget or header widget from the application and UI
+        """
         if not self.tree_widget.selectedItems():
             self.configuration_widgets.logger.warning('Nothing has been selected. Please select an item and try again.')
             return
@@ -152,16 +186,25 @@ class ClientFileManager(QtWidgets.QMainWindow):
         [(item.parent() or root).removeChild(item) for item in _selected_items]
 
     def integrate_client_files(self):
+        """
+        Starting the integration process.
+        Checking the widgets that are added to the Tree Widget are correct and
+        items actually exists.
+        """
         self.configuration_widgets.logger.info('Starting to integrate client files...')
         if self.configuration_widgets.logging_status_checkBox.isChecked:
             save_integrate_logging = IntegrateLogger(
                 self.configuration_widgets.logging_location_label.text().replace('Logging Location: ', '')
             )
+        else:
+            save_integrate_logging = False
+        # Checking the items
         root = self.tree_widget.invisibleRootItem()
         child_count = root.childCount()
         if not child_count:
             self.configuration_widgets.logger.warning('No Client Files have been added.')
             return
+        # Starting to process files inside the Tree Widget
         _integrate = IntegrateFiles(
             root, 
             child_count, 
