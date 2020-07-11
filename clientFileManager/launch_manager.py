@@ -17,20 +17,20 @@ import os
 import sys
 
 # Application - ui_items
-from configuration.configure import ConfigureFiles
-from third_party.Qt import QtWidgets, QtCore, QtGui
-from integrate.integrate_files import IntegrateFiles
-from ui_items.custom_tree_widget import CustomTreeWidget
-from logger.application_logging import IntegrateLogger
-from paths import _USER_DOCUMENTS
-from ui_items.add_widgets import (
+from clientFileManager.configuration.configure import ConfigureFiles
+from clientFileManager.third_party.Qt import QtWidgets, QtCore, QtGui
+from clientFileManager.integrate.integrate_files import IntegrateFiles
+from clientFileManager.ui_items.custom_tree_widget import CustomTreeWidget
+from clientFileManager.logger.application_logging import IntegrateLogger
+from clientFileManager.paths import _USER_DOCUMENTS
+from clientFileManager.ui_items.add_widgets import (
     GroupWidgets, 
     AddClientItemsButtons, 
     AddIntegrateButton, 
     AddConfigurationWidgets,
     AddSaveConfigurationWidget
 )
-from utils import (
+from clientFileManager.utils import (
     open_file, 
     open_folder, 
     write_json, 

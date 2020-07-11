@@ -19,9 +19,9 @@ import getpass
 from pathlib import Path
 
 # Application
-from paths import _CSS, _INTEGRATE_LOCATION, _LOGGING_LOCATION, _UI_CONFIGURATION
-from third_party.Qt import _loadUi
-from third_party.Qt import QtWidgets
+from clientFileManager.paths import _CSS, _INTEGRATE_LOCATION, _LOGGING_LOCATION, _UI_CONFIGURATION
+from clientFileManager.third_party.Qt import _loadUi
+from clientFileManager.third_party.Qt import QtWidgets
 
 _INGEST_FOLDERS = [
         'Elements', 

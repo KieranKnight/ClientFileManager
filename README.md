@@ -1,1 +1,10 @@
 # clientFileManager
+This application allows the integration of large quantities of files into an internal filing structure that might not match the structure the files have been received as.
+
+All files that are added into the application have multiple options on how the file will be handled, where the file where be placed, etc.
+
+A configuration option is avaliable for the output location. The output location is the top main folder where the received files will be integrated to. However, the files won't be placed directly into this folder. Each file will be placed into something like the following:
+`{outputLocation}/{sequence}/{shot}/{option}/{file}`
+
+## Prerequisites
+Make sure that you have Python 3.5+ and either PySide, PySide2, PyQt or PyQt2
