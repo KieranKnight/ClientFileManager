@@ -18,9 +18,9 @@
 import os
 
 # Application
-from clientFileManager.utils import read_css
-from clientFileManager.third_party.Qt import QtWidgets, QtCore, QtGui
-from clientFileManager.paths import (
+from utils import read_css
+from third_party.Qt import QtWidgets, QtCore, QtGui
+from paths import (
     _BRANCH_CLOSED_PNG,
     _BRANCH_END_PNG,
     _BRANCH_MORE_PNG,

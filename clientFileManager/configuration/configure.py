@@ -23,18 +23,18 @@ import logging
 from pathlib import Path
 
 # Application
-from clientFileManager.utils import (
+from utils import (
     read_json, 
     write_json,
     _DEFAULT_CONFIG
 )
-from clientFileManager.paths import (
+from paths import (
     _APP_LOCATION,
     _UI_CONFIG_FOLDER, 
     _UI_CONFIGURATION,
     _LOGGING_LOCATION
 )
-from clientFileManager.logger.application_logging import ApplicationLogger
+from logger.application_logging import ApplicationLogger
 
 
 class IntegrateConfigure(object):

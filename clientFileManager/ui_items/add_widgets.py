@@ -13,8 +13,8 @@
 ################################################################################
 
 # Application
-from clientFileManager.configuration.configure import IntegrateConfigure
-from clientFileManager.third_party.Qt import QtWidgets, QtCore, QtGui
+from configuration.configure import IntegrateConfigure
+from third_party.Qt import QtWidgets, QtCore, QtGui
 
 
 class GroupWidgets(QtWidgets.QGroupBox):
