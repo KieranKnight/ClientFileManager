@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-
 ################################################################################
-## INGEST TOOL - PLACING FILES INTO A DESIRED LOCATION AND TRACKING THEM
+## Client File Manager TOOL - Ingesting client files into a production pipeline
+##  with tracking, logging and configuration overrides.
 ##
 ## File : utils.py
 ## Description : This file is used functions throughout the application.

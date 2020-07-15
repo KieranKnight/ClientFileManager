@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ################################################################################
 ## Client File Manager TOOL - Ingesting client files into a production pipeline
 ##  with tracking, logging and configuration overrides.
